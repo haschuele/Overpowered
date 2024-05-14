@@ -1,9 +1,11 @@
 # Overpowered
 
-The power grid is big and complicated, so it’s no surprise that the process of adding new power generators to the grid is too. In order to connect a generator to the grid, developers have to submit an application to the grid operator’s Interconnection Queue. The Queue is notoriously slow and often ends with developers dropping out.
+The power grid is big and complicated, so it’s no surprise that the process of adding new power generators to the grid is too. In order to connect a generator to the grid, developers have to submit an application to the grid operator’s (ISO's) Interconnection Queue. The Queue is notoriously slow and often ends with developers dropping out due to high infrastructure costs.
 
-As we move towards a better, greener grid, we need an improved application process. That’s where Overpowered’s interactive tool comes in. By recommending groups of applicants to be studied together and providing visibility into the results, we can speed up processing, encourage sharing infrastructure costs, and reduce failed applications.
+Until recently, ISOs worked through the Queue on a first come first served basis. However, recent FERC legislation now requires ISOs to assess groups of applicants in “cluster analyses”. That’s where Overpowered comes in. By identifying strategic groups of applicants, we put more power in the hands of both ISOs and developers. ISO impact studies can be conducted more quickly if they’re able to approve smaller, related groups. Small batch processing also allows for more developer flexibility since they won’t be beholden to a small application window. Finally, developers will be less likely to drop out if the cost of building new infrastructure can be shared across a group instead of born individually. 
+
+As we move towards a better, greener grid, we need an improved application process. By recommending groups of applicants to be studied together and providing visibility into the results, we can speed up processing, encourage sharing infrastructure costs, and reduce failed applications.
 
 Let’s get to a greener grid, faster.
 
-This group project was conducted in the UC Berkeley MIDS' "Capstone" course. Code snippets for this project can be found [here](). You can access the tool [here](https://overpowered-dm3diygcbm7tjtbibxwnfu.streamlit.app/). Please note, the application has not been maintained since the end of the course in April 2024.
+This group project was conducted in the UC Berkeley MIDS' "Capstone" course. Code snippets for this project can be found [here](https://github.com/haschuele/Overpowered/blob/main/Code%20Snippets.md). You can access the tool [here](https://overpowered-dm3diygcbm7tjtbibxwnfu.streamlit.app/) or see a quick overview [here](https://github.com/haschuele/Overpowered/blob/main/Tool%20Overview.md). Please note, the web application has not been maintained since the end of the course in April 2024.
