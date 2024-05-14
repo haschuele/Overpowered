@@ -1,0 +1,1 @@
+This project brought together various data sources, including the CAISO Interconnection Queue, and organized them into 4 interpretable categories: Location, Infrastructure, Process, and Likelihood of Approval. Users can set custom weights for these categories based on the unique needs of their ISO and see 
