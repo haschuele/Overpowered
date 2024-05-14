@@ -1,71 +1,4 @@
-# Data Cleaning
-```python
-# Pull in CAISO Queue data
-caiso_queue_df = spark.read.csv(f"{blob_url}/capstone_data/strippedCaisoQueueData.csv", header = False).toPandas()
-
-# Clean up columns
-project_columns = [
-    "Project Name",
-    "Queue Position",
-    "Interconnection Request Receive Date",
-    "Application Status",
-    "Study Process",
-    "Type-1",
-    "Type-2",
-    "Type-3",
-    "Fuel-1",
-    "Fuel-2",
-    "Fuel-3",
-    "MW-1",
-    "MW-2",
-    "MW-3",
-    "Net MWs to Grid",
-    "MWh-1",
-    "MWh-2",
-    "MWh-3",
-    "Full Capacity, Partial or Energy Only (FC/P/EO)",
-    "TPD Allocation Percentage",
-    "Off-Peak Deliverability and Economic Only",
-    "TPD Allocation Group",
-    "County",
-    "State",
-    "Utility",
-    "PTO Study Region",
-    "Station or Transmission Line",
-    "Proposed On-line Date (as filed with IR)",
-    "Current On-line Date",
-    "Suspension Status",
-    "Feasibility Study or Supplemental Review",
-    "System Impact Study or Phase I Cluster Study",
-    "Facilities Study (FAS) or Phase II Cluster Study",
-    "Optional Study (OS)",
-    "Interconnection Agreement Status"
-]
-
-caiso_queue_df.columns = project_columns
-# caiso_queue_df = caiso_queue_df.set_index("Project Name")
-
-# Keep only projects in CA
-caiso_queue_df = caiso_queue_df[caiso_queue_df['State'].str.contains('CA', case=False)]
-
-# Clean variables
-caiso_queue_df['Net MWs to Grid'] = caiso_queue_df['Net MWs to Grid'].astype(float)
-caiso_queue_df['Project Name'] = caiso_queue_df['Project Name'].str.strip()
-
-# Cleaned substation name
-regex_pattern = r'\b(?:substation|kv|bus|ValleySubstation|\b\d+\s*kV?)\b'
-
-caiso_queue_df['clean substation name'] = caiso_queue_df['Station or Transmission Line'].apply(lambda x: re.sub(regex_pattern, '', x, flags=re.IGNORECASE).strip() if 'Substation' in x else '')
-
-# Fix substation spot checks
-caiso_queue_df.loc[caiso_queue_df['clean substation name'] == 'Litehipe', 'clean substation name'] = 'Lighthipe'
-caiso_queue_df.loc[caiso_queue_df['clean substation name'] == 'Coolwater', 'clean substation name'] = 'Cool Water'
-
-# Display
-caiso_queue_df
-```
-
-# Fuzzy Match CAISO Substation data to GIS Data 
+# Fuzzy Match CAISO Substation Data to GIS Data 
 ```python
 # Filter caiso queue to substations
 caiso_queue_substations_df = caiso_queue_df[caiso_queue_df["Station or Transmission Line"].str.contains("Substation", case=False, na=False)]
@@ -191,7 +124,8 @@ X_resampled, y_resampled = oversampler.fit_resample(X, y)
 
 # Splitting the dataset into training and testing set
 X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=0)
-
+```
+```python
 # Train Logistic Regression model
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
@@ -206,7 +140,8 @@ model = Pipeline(steps=[
 
 # Fit the model
 model.fit(X_train, y_train)
-
+```
+```python
 # Evaluate the model performance
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
@@ -220,7 +155,8 @@ print("Accuracy:", accuracy)
 # Generate classification report
 print("Classification Report:")
 print(classification_report(y_test, y_pred))
-
+```
+```python
 # Accessing coefficients (weights)
 coefficients = model.named_steps['classifier'].coef_[0]
 intercept = model.named_steps['classifier'].intercept_
@@ -238,4 +174,65 @@ coef_df = pd.DataFrame(coef_dict)
 
 # Display the DataFrame
 coef_df.sort_values(by='Coefficient', ascending=False)
+```
+
+# Create Project Clusters based on Weighted Features
+```python
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import MinMaxScaler
+import numpy as np
+import pandas as pd
+
+def find_top_k_similarities_for_rows_below_with_weights_and_scores(df, k, weights):
+    # Normalize the DataFrame using MinMaxScaler to ensure fair comparison.
+    scaler = MinMaxScaler()
+    scaled_features = scaler.fit_transform(df)
+    
+    # Apply the weights to the scaled features. This is a simple element-wise multiplication.
+    weighted_features = scaled_features * weights
+    
+    # Dictionary to hold the tuples of indices and scores of the top k similar rows for each row.
+    top_k_similar_indices_and_scores = {}
+    
+    # Calculate cosine similarity for each row against all others, using the weighted features.
+    cosine_sim_matrix = cosine_similarity(weighted_features)
+    
+    for i in range(len(df) - 1):  # Exclude the last row since there are no rows below it to compare.
+        # Filter out the current and above rows' similarities for the current row 'i'.
+        current_row_similarities = cosine_sim_matrix[i, i+1:]
+        
+        # Get the indices of the top k values. Since we're looking at a sliced array, add i+1 to correct the indices.
+        top_k_indices = np.argsort(-current_row_similarities)[:k]
+        
+        # Now also retrieve the top k similarity scores using the sorted indices.
+        top_k_scores = current_row_similarities[top_k_indices]
+        
+        # Store these indices and scores as tuples in the dictionary.
+        top_k_similar_indices_and_scores[i] = [(i+1+idx, score) for idx, score in zip(top_k_indices, top_k_scores)]
+    
+    return top_k_similar_indices_and_scores
+
+# Example weights for each feature in your DataFrame.
+weights = np.array([15, 1, 1, 1, 1])  # Adjust these weights according to the importance you assign to each feature.
+
+k = 5  # Define how many top similarities you're interested in.
+
+# Assuming `caiso_mvp_input_encoded_df` is your DataFrame.
+top_k_similarities_with_weights_and_scores = find_top_k_similarities_for_rows_below_with_weights_and_scores(caiso_mvp_input_encoded_df, k, weights)
+
+# Assuming `caiso_mvp_input` is your original DataFrame with project names or IDs as the index
+project_names_mapping = caiso_mvp_input.index
+
+# Create a new dictionary to hold the project names and scores instead of indices
+top_k_similarities_with_project_names_and_scores = {}
+
+for row_index, similar_tuples in top_k_similarities_with_weights_and_scores.items():
+    # Map the row index to its corresponding project name
+    project_name = project_names_mapping[row_index]
+    
+    # For each tuple in the list (which contains an index and a score),
+    # map the index to the project name and keep the score
+    similar_project_names_and_scores = [(project_names_mapping[idx], score) for idx, score in similar_tuples]
+    
+    top_k_similarities_with_project_names_and_scores[project_name] = similar_project_names_and_scores
 ```
