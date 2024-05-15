@@ -1,6 +1,8 @@
 This project brought together various data sources, including the CAISO Interconnection Queue, to create a custom scoring mechanism which provides insight into the strength of each recommended cluster. 
 
-Both supervised and unsupervised machine learning techniques were used to build the scoring mechanism and resulting clusters. The score  and is comprised of 4 interpretable categories (below). Users can set custom weights for these categories based on the unique needs of their ISO.
+![Sample Results](https://github.com/haschuele/Overpowered/blob/main/Sample%20Results.png)
+
+Both supervised and unsupervised machine learning techniques were used to build the scoring mechanism and resulting clusters. The score is comprised of 4 interpretable categories (below). Users can set custom weights for these categories based on the unique needs of their ISO.
 
 - Likelihood of Approval: This is the likelihood that a given project would succeed independent of the rest of the cluster, based on past project applications.
 - Location: This measures the geospatial proximity between two projects.
@@ -9,6 +11,9 @@ Both supervised and unsupervised machine learning techniques were used to build 
 
 Once weights and a base project have been selected, the tool will provide a recommended cluster and visibility into the supporting scores.
 
-![Sample Results](https://github.com/haschuele/Overpowered/blob/main/Sample%20Results.png)
+https://github.com/haschuele/Overpowered/assets/107952982/7a9f53d7-042f-409a-ae10-1ad10654a046
+
+
+
 
 The tool also provides maps for visualization...
