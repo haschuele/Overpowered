@@ -1,4 +1,6 @@
 # Fuzzy Match CAISO Substation Data to GIS Data 
+ISOs have access to detailed grid mappings, but these are not publicly available. In order to identify the geolocations of the CAISO Interconnection Queue "Point of Interconnection" variable, we used fuzzy matching. The code below shows a snippet in which we pull latitude and longitude into the Queue data from a separate GIS data source by matching on substation name. This allowed us to plot the Queue projects on a map as well as calculate distance weighting for the cluster algorithm.
+
 ```python
 # Filter caiso queue to substations
 caiso_queue_substations_df = caiso_queue_df[caiso_queue_df["Station or Transmission Line"].str.contains("Substation", case=False, na=False)]
