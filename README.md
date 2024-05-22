@@ -8,7 +8,7 @@ Until recently, ISOs worked through the Queue on a first come first served basis
 
 As we move towards a better, greener grid, we need an improved application process. Let’s get to a greener grid, faster.
 
-This group project was conducted in the UC Berkeley MIDS' "Capstone" course. You can access the tool [here](https://overpowered-dm3diygcbm7tjtbibxwnfu.streamlit.app/) or see a quick overview [here](https://github.com/haschuele/Overpowered/blob/main/Tool%20Overview.md). Please note, the web application has not been maintained since the end of the course in April 2024. Code snippets for this project can be found [here](https://github.com/haschuele/Overpowered/blob/main/Code%20Snippets.md) and the final presentation slides [here](https://github.com/haschuele/Overpowered/blob/main/Overpowered%20-%20Final%20Presentation.pdf). 
+This group project was conducted in the UC Berkeley MIDS' "Capstone" course. You can access the [Streamlit tool](https://overpowered-dm3diygcbm7tjtbibxwnfu.streamlit.app/) or a quick [overview](https://github.com/haschuele/Overpowered/blob/main/Tool%20Overview.md). Please note, the web application has not been maintained since the end of the course in April 2024. You can also view [code snippets](https://github.com/haschuele/Overpowered/blob/main/Code%20Snippets.md) and the [final presentation slides](https://github.com/haschuele/Overpowered/blob/main/Overpowered%20-%20Final%20Presentation.pdf). 
 
 References
 1) https://decarbonization.visualcapitalist.com/gridlock-visualizing-the-u-s-clean-energy-backlog/#:~:text=Here%20are%20some%20of%20the,to%20the%20Energy%20Transitions%20Commission
