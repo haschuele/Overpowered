@@ -183,6 +183,8 @@ coef_df.sort_values(by='Coefficient', ascending=False)
 ```
 
 # Create Project Clusters based on Weighted Features
+To generate recommendations of Queue projects that should be studied together, we created a custom clustering algorithm using a curated set of features from various data sources. These features fell broadly into 3 categories (Location, Infrastructure, and Process) and are described in more detail on the [Tool Overview](https://github.com/haschuele/Overpowered/blob/main/Tool%20Overview.md) page.
+
 ```python
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MinMaxScaler
