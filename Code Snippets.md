@@ -41,7 +41,7 @@ matched_substations_df
 ```
 
 # Calculate Inverse Haversine Distance from Each Project to Nearest Retired Power Plant
-One of the biggest challenges with renewables is the Duck Curve problem - Solar generates the most electricity mid-day when demand is low. As such, it's desirable for Queue applicants to build or be near energy storage so this power can be conserved. From our research and subject matter expert interviews, we determined that retired power plants are great candidates for energy storage facilities as they're already connected to the grid and zoned for industry usage. In the snippet below, we calculate the distance between each Queue project and its nearest retired power plant. Then we apply inverse distance weighting so Queue projects near a retired plant are weighted exponentially higher than projects that are far away.
+One of the biggest challenges with renewables is the Duck Curve problem; solar generates the most electricity mid-day when demand is low. It's one of the reasons why it's desirable for Queue applicants to build or be near energy storage - so this power can be conserved. From our research and subject matter expert interviews, we determined that retired power plants are great candidates for energy storage facilities as they're already connected to the grid and zoned for industry usage. In the snippet below, we calculate the distance between each Queue project and its nearest retired power plant. Then we apply inverse distance weighting so Queue projects near a retired plant are weighted exponentially higher than projects that are far away.
 
 ```python
 # !pip install haversine
@@ -84,6 +84,8 @@ caiso_queue_df
 ```
 
 # Use Historical Queue Data to Model Likelihood of Approval for Current Projects
+A "Likelihood of Approval" score was calculated for each project in the current Queue using historical data of completed and withdrawn projects. The initial iteration was a simple logistic regression model, shown below.
+
 ```python
 # Preprocess data for modeling
 import pandas as pd
